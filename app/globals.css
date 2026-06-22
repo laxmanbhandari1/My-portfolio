@@ -10,7 +10,7 @@
   --ink: #f4f2ec;
   --muted: #9a948a;
   --gold: #4fb87a;
-  --gold-deep: #2f9d63;
+  --gold-deep: #47c983;
   --gold-soft: rgba(79, 184, 122, 0.14);
   --line: rgba(244, 242, 236, 0.1);
   --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -2016,7 +2016,7 @@ html.scrolled .nav {
 
 /* two-column hero now that the right block is gone — photo gets real space */
 .hero-grid {
-  grid-template-columns: 0.85fr 1.3fr 0.85fr;
+  grid-template-columns: 1.85fr 1.4fr 0.85fr;
   gap: clamp(16px, 3vw, 32px);
 }
 .hero-left {
