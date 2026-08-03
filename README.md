@@ -1,37 +1,71 @@
 # Laxman Bhandari — Portfolio (Next.js)
 
-A cinematic portfolio: an animated **entry gate** (signature draws in) → a **glass-shatter**
-transition → the **marigold home/hero** → about → colourful **project cards** → skills → contact.
+A cinematic white-and-red portfolio: a landing gate that hands off to the home
+page via a solid red-wipe transition, then a 3D scroll-tilt About, a
+horizontal-scroll Projects section, and a stacked-card statement — all in one
+Next.js App Router project.
 
-## Run locally
+## Run it
+
 ```bash
 npm install
 npm run dev
 ```
+
 Open http://localhost:3000
 
-## Deploy (free)
-Push to GitHub and import on **Vercel** — zero config. Or `npm run build` then `npm start`.
+Build for production:
 
-## Make it yours
-- **Your photo:** replace `public/me.png` with your background-removed PNG (portrait, transparent bg).
-- **Project images:** swap `public/projects/*.png` with real screenshots.
-- **Text, links, email, projects, skills, stats:** all in `lib/data.js`
-  (email is `hello@laxmanbhandari.com`, with `official@laxmanbhandari.com` in the footer).
-- **Accent colour:** change `--gold` in `app/globals.css`.
-- The signature uses the **Dancing Script** Google font — it renders as flowing cursive in a real browser.
+```bash
+npm run build && npm start
+```
 
-## Structure
-- `components/Gate.jsx` — intro signature + glass-shatter
-- `components/Hero.jsx` — marigold home
-- `components/Projects.jsx` — colourful project cards
-- `components/About / Skills / Contact / Nav` — the rest
-- `components/Site.jsx` — ties it together (gate → reveal → scroll animations)
+## Stack
 
-## What's included (latest)
-- **Entry gate → glass-shatter → home** (kept; plays on every load).
-- **Projects carousel** — 4 projects, 3 visible, tilted/animated cards; the side arrows slide the window (first hides as the 4th appears). Edit/add projects in `lib/data.js`.
-- **Blog** at `/blog` with individual post pages. Edit posts in `lib/blog.js`.
-- **Contact form** (name/email/message). On submit it opens the visitor's mail app to `hello@laxmanbhandari.com`.
-  - Want messages saved to a database instead? Tell me and I'll wire the form to **Supabase** (needs your project URL + anon key in `.env.local`).
-- Nav: **Blog** replaces Play.
+- **Next.js 14** (App Router, JavaScript)
+- **Framer Motion** — all scroll-linked animations
+- Plain CSS design system in `src/app/globals.css`
+- Fonts loaded at runtime: Bricolage Grotesque (display), Instrument Sans
+  (body), JetBrains Mono (labels)
+
+## Where things live
+
+```
+src/
+  app/
+    layout.js         fonts + SEO metadata
+    page.js           renders <Experience/>
+    globals.css       the whole white/red design system + tokens
+  components/
+    Experience.jsx    orchestrates gate → red-wipe → home
+    Landing.jsx       the intro gate
+    Nav.jsx  Hero.jsx  StackStatement.jsx
+    About.jsx         3D scroll-tilt reveal
+    Projects.jsx      horizontal-scroll panels
+    Skills.jsx  Blog.jsx  Contact.jsx
+    ui/
+      ContainerScroll.jsx   the tilt engine
+      HorizontalScroll.jsx  the pinned vertical→horizontal engine
+      Icons.jsx
+  lib/
+    data.js           ← EDIT THIS to change all content
+```
+
+## To finish (placeholders)
+
+1. **AlgoFlow** — open `src/lib/data.js`, find the `algoflow` entry (marked
+   `placeholder: true`) and fill in `title`, `tagline`, `description`, `tech`,
+   `liveLink`, `githubLink`. Then set `placeholder: false`.
+2. **Project screenshots** — drop images in `public/projects/` matching the
+   `image` paths in `data.js` (e.g. `public/projects/byaparhub.png`). Until
+   then, each card shows a labelled placeholder telling you the expected path.
+3. **Colors / copy / links** — everything is tokenised. Palette lives at the top
+   of `globals.css` (`--red`, `--ink`, etc.); all text lives in `data.js`.
+
+## Design notes
+
+- The signature moment is the **landing → home red wipe** (in `Experience.jsx`).
+- `prefers-reduced-motion` is respected — the wipe and orbital animation are
+  skipped for users who ask for reduced motion.
+- The horizontal Projects scroll is desktop-first; on narrow screens the panels
+  stack vertically.
