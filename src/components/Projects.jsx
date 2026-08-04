@@ -5,7 +5,7 @@ import { Icon } from "./ui/Icons";
 import { SplitReveal } from "./ui/SplitReveal";
 import { projects, profile } from "@/lib/data";
 
-const PANEL_COUNT = projects.length + 1; // projects + CTA panel
+const PANEL_COUNT = projects.length; // one panel per project
 
 function ProjectPanel({ p }) {
   return (
@@ -76,18 +76,6 @@ export function Projects() {
         {projects.map((p) => (
           <ProjectPanel key={p.id} p={p} />
         ))}
-        {/* Closing CTA panel */}
-        <div className="panel cta">
-          <div className="cta-inner">
-            <span className="mono">Like what you see?</span>
-            <h3 className="project-title" style={{ margin: "16px 0" }}>
-              Let&apos;s build something good<span className="dot">.</span>
-            </h3>
-            <a href="#contact" className="btn-primary">
-              Get in touch <Icon name="arrow" />
-            </a>
-          </div>
-        </div>
       </HorizontalScroll>
     </section>
   );

@@ -331,3 +331,45 @@ html.lenis,html.lenis body{height:auto}
 @media (pointer:coarse){.cursor-dot,.cursor-ring{display:none}}
 
 .float-layer{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+
+/* ═══════════ SECTION SNAKE LAYER ═══════════ */
+.snake-layer{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.85}
+.has-snake{position:relative}
+.has-snake > :not(.snake-layer){position:relative;z-index:1}
+
+/* ═══════════ SOLAR-SYSTEM TOOLBOX ═══════════ */
+.solar-stage{display:flex;justify-content:center;align-items:center;perspective:1300px;padding:clamp(20px,5vw,60px) 16px 20px;overflow:visible}
+.solar{position:relative;width:min(640px,94vw);height:min(640px,94vw);transform-style:preserve-3d;transform-origin:center 60%}
+.orbit-path{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;border:1px dashed var(--hair)}
+.orbit-path.p-inner{width:48%;height:48%}
+.orbit-path.p-outer{width:84%;height:84%;border-color:#efd9d7}
+.ring{position:absolute;top:50%;left:50%;border-radius:50%}
+.ring-inner{width:48%;height:48%;margin:-24% 0 0 -24%;animation:orbit 42s linear infinite}
+.ring-outer{width:84%;height:84%;margin:-42% 0 0 -42%;animation:orbit 66s linear infinite reverse}
+@keyframes orbit{to{transform:rotate(360deg)}}
+@keyframes orbitrev{to{transform:rotate(-360deg)}}
+.orbit-item{position:absolute;transform:translate(-50%,-50%)}
+.orbit-badge{display:flex;flex-direction:column;align-items:center;gap:6px;width:clamp(58px,10vw,78px);
+  height:clamp(58px,10vw,78px);border-radius:50%;background:#fff;box-shadow:0 10px 26px rgba(20,20,20,.12), 0 0 0 1px var(--hair);
+  justify-content:center;transition:transform .3s var(--ease), box-shadow .3s}
+.orbit-badge svg{width:44%;height:44%}
+.orbit-badge.rev-in{animation:orbitrev 42s linear infinite}
+.orbit-badge.rev-out{animation:orbit 66s linear infinite reverse}
+.orbit-name{position:absolute;top:calc(100% + 6px);font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);white-space:nowrap;opacity:0;transition:opacity .25s}
+.orbit-item:hover .orbit-name{opacity:1}
+.orbit-item:hover .orbit-badge{transform:scale(1.15);box-shadow:0 16px 34px rgba(229,38,31,.22), 0 0 0 1px var(--red)}
+.solar-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:clamp(96px,17%,150px);height:clamp(96px,17%,150px);
+  border-radius:50%;background:radial-gradient(circle at 38% 32%, #fff, #f4eceb 70%, #efe1df);box-shadow:0 20px 50px rgba(229,38,31,.16), inset 0 0 0 1px var(--hair);
+  display:grid;place-items:center;text-align:center}
+.solar-core span{font-family:var(--display);font-weight:800;font-size:clamp(.85rem,2vw,1.15rem);letter-spacing:-.02em;line-height:1;color:var(--ink)}
+.solar-core span::first-line{color:var(--red)}
+@media (prefers-reduced-motion:reduce){.ring,.orbit-badge{animation:none!important}}
+
+.cursor-snake{position:fixed;inset:0;width:100vw;height:100vh;z-index:22;pointer-events:none}
+
+/* ═══════════ PREMIUM LANDING (snake writes name) ═══════════ */
+.landing-premium{justify-content:space-between}
+.gate-canvas-wrap{position:relative;flex:1;width:100%;min-height:0}
+.gate-name-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.gate-bottom .gate-hint{align-self:flex-start}
+.gate-actions{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;width:100%;flex-wrap:wrap}

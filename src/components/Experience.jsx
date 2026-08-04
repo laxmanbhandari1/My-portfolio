@@ -7,12 +7,13 @@ import { Hero } from "./Hero";
 import { StackStatement } from "./StackStatement";
 import { About } from "./About";
 import { Projects } from "./Projects";
-import { Skills } from "./Skills";
+import { SolarSkills } from "./SolarSkills";
 import { Blog } from "./Blog";
 import { Contact, Footer } from "./Contact";
 import { SmoothScroll } from "./ui/SmoothScroll";
 import { ScrollProgress } from "./ui/ScrollProgress";
 import { Cursor } from "./ui/Cursor";
+import { CursorSnake } from "./ui/CursorSnake";
 import { Marquee } from "./ui/Marquee";
 import { Reveal } from "./ui/Reveal";
 
@@ -57,10 +58,11 @@ export function Experience() {
         <Marquee />
         <About />
         <Projects />
-        <Reveal><Skills /></Reveal>
+        <SolarSkills />
         <Reveal><Blog /></Reveal>
         <Reveal><Contact /></Reveal>
         <Footer />
+        {homeVisible && <CursorSnake />}
       </motion.main>
 
       <AnimatePresence>

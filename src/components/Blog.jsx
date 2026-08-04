@@ -1,9 +1,13 @@
 import { posts } from "@/lib/data";
 import { SplitReveal } from "./ui/SplitReveal";
+import { SnakeLayer } from "./ui/SnakeLayer";
+
+const BLOG_SNAKE = [{ color: "#7c3aed", dark: "#4a1d95", light: "rgba(210,180,255,.55)", pellet: "#7c3aed", pr: "124,58,237" }];
 
 export function Blog() {
   return (
-    <section className="section" id="blog">
+    <section className="section has-snake" id="blog">
+      <SnakeLayer colors={BLOG_SNAKE} />
       <div className="section-head container">
         <div className="eyebrow-row">
           <span className="tick" />
