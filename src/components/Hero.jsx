@@ -12,7 +12,6 @@ export function Hero() {
   const ctaRef = useRef(null);
   const [imgOk, setImgOk] = useState(true);
 
-  // cursor tilt + magnetic CTA
   useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
@@ -42,180 +41,162 @@ export function Hero() {
     };
   }, []);
 
-  // ── slithering 3D-look snake background ──
+  // ── two snakes roaming the whole hero, opposite directions ──
   useEffect(() => {
     const canvas = snakeRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    let W = 0, H = 0, raf = 0, t = 0, phase = 0;
+    let W = 0, H = 0, raf = 0, t = 0, phase = 0, snakes = [];
 
-    const SP = 9;              // segment spacing
-    const MAXR = 21;           // body radius
-    const HEADR = 26;
-    const SPEED = 2.5;
-    const MAXTURN = 0.055;
-    const MAXLEN = 120;
-    const BASE = "#cf1f16", DARK = "#9c130c", LIGHT = "rgba(255,158,148,0.55)";
-
-    const mouse = { x: 0, y: 0, on: false };
-    let head = { x: 0, y: 0, a: 0 };
-    let spine = [];
-    let food = { x: 0, y: 0, pulse: 0 };
-    let tongue = 0;
-
+    const SP = 9, SPEED = 2.6, MAXTURN = 0.045, MAXLEN = 130;
     const rnd = (a, b) => a + Math.random() * (b - a);
     const norm = (a) => { while (a > Math.PI) a -= Math.PI * 2; while (a < -Math.PI) a += Math.PI * 2; return a; };
-    const placeFood = () => { food.x = rnd(W * 0.12, W * 0.88); food.y = rnd(H * 0.15, H * 0.85); };
 
+    function newTarget(s) {
+      let x, y, tries = 0;
+      do { x = rnd(W * 0.08, W * 0.92); y = rnd(H * 0.1, H * 0.9); tries++; }
+      while (Math.hypot(x - s.head.x, y - s.head.y) < W * 0.4 && tries < 12);
+      s.target.x = x; s.target.y = y;
+    }
+    function createSnake(cfg) {
+      const s = {
+        head: { x: cfg.x, y: cfg.y, a: cfg.a }, spine: [], target: { x: 0, y: 0 },
+        color: cfg.color, dark: cfg.dark, light: cfg.light, pellet: cfg.pellet,
+        maxr: 22, headr: 28, pulse: 0,
+      };
+      for (let i = 0; i < 84; i++) s.spine.push({ x: cfg.x - Math.cos(cfg.a) * i * SP, y: cfg.y - Math.sin(cfg.a) * i * SP });
+      newTarget(s);
+      return s;
+    }
     function init() {
-      head = { x: W * 0.5, y: H * 0.5, a: rnd(0, Math.PI * 2) };
-      spine = [];
-      for (let i = 0; i < 74; i++) spine.push({ x: head.x - Math.cos(head.a) * i * SP, y: head.y - Math.sin(head.a) * i * SP });
-      placeFood();
+      snakes = [
+        createSnake({ x: W * 0.25, y: H * 0.35, a: 0.4, color: "#cf1f16", dark: "#8f110b", light: "rgba(255,158,148,0.55)", pellet: "#e5261f" }),
+        createSnake({ x: W * 0.75, y: H * 0.68, a: Math.PI + 0.4, color: "#f0a500", dark: "#a86e00", light: "rgba(255,236,160,0.6)", pellet: "#f0a500" }),
+      ];
     }
     function resize() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const r = canvas.getBoundingClientRect();
-      W = r.width; H = r.height;
+      W = canvas.clientWidth; H = canvas.clientHeight;
+      if (!W || !H) { requestAnimationFrame(resize); return; }
       canvas.width = W * dpr; canvas.height = H * dpr;
-      canvas.style.width = W + "px"; canvas.style.height = H + "px";
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      if (!spine.length) init();
+      if (!snakes.length) init();
+      else snakes.forEach((s) => { if (s.target.x > W || s.target.y > H || s.target.x < 0 || s.target.y < 0) newTarget(s); });
     }
 
-    function step() {
-      // choose target: cursor if present, otherwise the food pellet
-      const tx = mouse.on ? mouse.x : food.x;
-      const ty = mouse.on ? mouse.y : food.y;
-      let desired = Math.atan2(ty - head.y, tx - head.x);
-      let diff = norm(desired - head.a);
+    function step(s) {
+      const desired = Math.atan2(s.target.y - s.head.y, s.target.x - s.head.x);
+      let diff = norm(desired - s.head.a);
       diff = Math.max(-MAXTURN, Math.min(MAXTURN, diff));
-      head.a += diff + Math.sin(t * 1.7) * 0.006;
-      head.x += Math.cos(head.a) * SPEED;
-      head.y += Math.sin(head.a) * SPEED;
-      // keep on screen
-      const m = 40;
-      if (head.x < m || head.x > W - m || head.y < m || head.y > H - m) {
-        const toC = Math.atan2(H / 2 - head.y, W / 2 - head.x);
-        head.a += norm(toC - head.a) * 0.03;
+      s.head.a += diff;
+      s.head.x += Math.cos(s.head.a) * SPEED;
+      s.head.y += Math.sin(s.head.a) * SPEED;
+      const m = 26;
+      if (s.head.x < m || s.head.x > W - m || s.head.y < m || s.head.y > H - m) {
+        const c = Math.atan2(H / 2 - s.head.y, W / 2 - s.head.x);
+        s.head.a += norm(c - s.head.a) * 0.05;
       }
-      // follow-the-leader chain
-      spine[0].x = head.x; spine[0].y = head.y;
-      for (let i = 1; i < spine.length; i++) {
-        const dx = spine[i].x - spine[i - 1].x, dy = spine[i].y - spine[i - 1].y;
-        const d = Math.hypot(dx, dy) || 1;
-        spine[i].x = spine[i - 1].x + (dx / d) * SP;
-        spine[i].y = spine[i - 1].y + (dy / d) * SP;
+      s.spine[0].x = s.head.x; s.spine[0].y = s.head.y;
+      for (let i = 1; i < s.spine.length; i++) {
+        const dx = s.spine[i].x - s.spine[i - 1].x, dy = s.spine[i].y - s.spine[i - 1].y, d = Math.hypot(dx, dy) || 1;
+        s.spine[i].x = s.spine[i - 1].x + (dx / d) * SP;
+        s.spine[i].y = s.spine[i - 1].y + (dy / d) * SP;
       }
-      // eat
-      if (Math.hypot(head.x - food.x, head.y - food.y) < HEADR + 6) {
-        placeFood();
-        if (spine.length < MAXLEN) { const last = spine[spine.length - 1]; for (let k = 0; k < 5; k++) spine.push({ x: last.x, y: last.y }); }
+      if (Math.hypot(s.head.x - s.target.x, s.head.y - s.target.y) < 90) {
+        newTarget(s);
+        if (s.spine.length < MAXLEN) { const last = s.spine[s.spine.length - 1]; for (let k = 0; k < 4; k++) s.spine.push({ x: last.x, y: last.y }); }
       }
     }
 
-    function normals() {
-      const N = spine.length, nx = new Array(N), ny = new Array(N);
+    function drawSnake(s) {
+      const N = s.spine.length, MAXR = s.maxr, HEADR = s.headr;
+      const nx = [], ny = [];
       for (let i = 0; i < N; i++) {
-        const p0 = spine[Math.max(0, i - 1)], p1 = spine[Math.min(N - 1, i + 1)];
+        const p0 = s.spine[Math.max(0, i - 1)], p1 = s.spine[Math.min(N - 1, i + 1)];
         const dx = p1.x - p0.x, dy = p1.y - p0.y, d = Math.hypot(dx, dy) || 1;
         nx[i] = -dy / d; ny[i] = dx / d;
       }
-      return { nx, ny };
-    }
-    function radius(i, N) {
-      const u = i / (N - 1);
-      if (u > 0.82) return MAXR * (1 - (u - 0.82) / 0.18);
-      return MAXR * (0.7 + 0.3 * Math.min(1, u / 0.08)); // slim neck → full body
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, W, H);
-      const N = spine.length;
-      const { nx, ny } = normals();
-      // undulating centreline (slither) + radii
-      const cx = new Array(N), cy = new Array(N), r = new Array(N);
+      const cx = [], cy = [], left = [], right = [];
       for (let i = 0; i < N; i++) {
-        const wave = Math.sin(phase - i * 0.28) * (MAXR * 0.55) * Math.min(1, i / 6);
-        cx[i] = spine[i].x + nx[i] * wave;
-        cy[i] = spine[i].y + ny[i] * wave;
-        r[i] = radius(i, N);
+        const wave = Math.sin(phase - i * 0.28) * (MAXR * 0.5) * Math.min(1, i / 6);
+        const CX = s.spine[i].x + nx[i] * wave, CY = s.spine[i].y + ny[i] * wave;
+        const u = i / (N - 1);
+        const r = u > 0.82 ? MAXR * (1 - (u - 0.82) / 0.18) : MAXR * (0.7 + 0.3 * Math.min(1, u / 0.08));
+        cx[i] = CX; cy[i] = CY;
+        left.push({ x: CX + nx[i] * r, y: CY + ny[i] * r });
+        right.push({ x: CX - nx[i] * r, y: CY - ny[i] * r });
       }
-      const left = [], right = [];
-      for (let i = 0; i < N; i++) {
-        left.push({ x: cx[i] + nx[i] * r[i], y: cy[i] + ny[i] * r[i] });
-        right.push({ x: cx[i] - nx[i] * r[i], y: cy[i] - ny[i] * r[i] });
-      }
-      const outline = (fill, ox = 0, oy = 0) => {
-        ctx.beginPath();
-        ctx.moveTo(left[0].x + ox, left[0].y + oy);
-        for (let i = 1; i < N; i++) ctx.lineTo(left[i].x + ox, left[i].y + oy);
-        for (let i = N - 1; i >= 0; i--) ctx.lineTo(right[i].x + ox, right[i].y + oy);
-        ctx.closePath(); ctx.fillStyle = fill; ctx.fill();
+      const smooth = (pts) => {
+        for (let i = 1; i < pts.length - 1; i++) {
+          const mx = (pts[i].x + pts[i + 1].x) / 2, my = (pts[i].y + pts[i + 1].y) / 2;
+          ctx.quadraticCurveTo(pts[i].x, pts[i].y, mx, my);
+        }
+        const last = pts[pts.length - 1]; ctx.lineTo(last.x, last.y);
       };
-      // soft ground shadow (3D lift)
-      ctx.save(); ctx.filter = "blur(7px)"; outline("rgba(0,0,0,0.12)", 3, MAXR * 0.7); ctx.restore();
+      const outline = (fill, ox = 0, oy = 0) => {
+        const rrev = right.slice().reverse();
+        ctx.save(); ctx.translate(ox, oy);
+        ctx.beginPath(); ctx.moveTo(left[0].x, left[0].y);
+        smooth(left); ctx.lineTo(rrev[0].x, rrev[0].y); smooth(rrev); ctx.closePath();
+        ctx.fillStyle = fill; ctx.fill(); ctx.restore();
+      };
+      // shadow
+      ctx.save(); ctx.filter = "blur(7px)"; outline("rgba(0,0,0,0.11)", 3, MAXR * 0.7); ctx.restore();
       // body
-      outline(BASE);
-      // belly shade along one side
-      ctx.save(); ctx.globalAlpha = 0.25; ctx.strokeStyle = DARK; ctx.lineWidth = MAXR * 0.5; ctx.lineJoin = "round"; ctx.lineCap = "round";
-      ctx.beginPath(); ctx.moveTo(right[0].x, right[0].y); for (let i = 1; i < N * 0.85; i++) ctx.lineTo(right[i | 0].x, right[i | 0].y); ctx.stroke(); ctx.restore();
-      // top highlight ridge (cylinder sheen)
-      ctx.save(); ctx.strokeStyle = LIGHT; ctx.lineWidth = MAXR * 0.7; ctx.lineJoin = "round"; ctx.lineCap = "round";
+      outline(s.color);
+      // top sheen
+      ctx.save(); ctx.strokeStyle = s.light; ctx.lineWidth = MAXR * 0.7; ctx.lineJoin = "round"; ctx.lineCap = "round";
       ctx.beginPath(); ctx.moveTo(cx[0], cy[0]); for (let i = 1; i < N * 0.72; i++) ctx.lineTo(cx[i], cy[i]); ctx.stroke(); ctx.restore();
 
       // head
-      const hx = cx[0], hy = cy[0], a = head.a;
-      const fx = Math.cos(a), fy = Math.sin(a), sx = -Math.sin(a), sy = Math.cos(a);
+      const hx = cx[0], hy = cy[0], a = s.head.a, fx = Math.cos(a), fy = Math.sin(a), sx = -Math.sin(a), sy = Math.cos(a);
       ctx.save(); ctx.translate(hx, hy); ctx.rotate(a);
-      ctx.fillStyle = BASE; ctx.beginPath(); ctx.ellipse(HEADR * 0.15, 0, HEADR * 1.15, HEADR * 0.9, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = LIGHT; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.ellipse(HEADR * 0.15, -HEADR * 0.28, HEADR * 0.8, HEADR * 0.35, 0, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
+      ctx.fillStyle = s.color; ctx.beginPath(); ctx.ellipse(HEADR * 0.15, 0, HEADR * 1.15, HEADR * 0.9, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 0.5; ctx.fillStyle = s.light; ctx.beginPath(); ctx.ellipse(HEADR * 0.15, -HEADR * 0.28, HEADR * 0.8, HEADR * 0.32, 0, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
       ctx.restore();
-      // tongue flick
-      tongue = Math.max(0, Math.sin(t * 2.4)) ;
-      if (tongue > 0.5) {
-        const bx = hx + fx * HEADR * 1.5, by = hy + fy * HEADR * 1.5, ln = HEADR * 0.9 * tongue;
+      // tongue
+      const tg = Math.sin(t * 2.4 + (s.color === "#f0a500" ? 1.5 : 0));
+      if (tg > 0.55) {
+        const bx = hx + fx * HEADR * 1.5, by = hy + fy * HEADR * 1.5, ln = HEADR * 0.85 * tg;
         ctx.strokeStyle = "#e5261f"; ctx.lineWidth = 2; ctx.lineCap = "round";
-        ctx.beginPath(); ctx.moveTo(hx + fx * HEADR, hy + fy * HEADR); ctx.lineTo(bx, by); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx + fx * ln + sx * ln * 0.5, by + fy * ln + sy * ln * 0.5);
+        ctx.beginPath(); ctx.moveTo(hx + fx * HEADR, hy + fy * HEADR); ctx.lineTo(bx, by);
+        ctx.moveTo(bx, by); ctx.lineTo(bx + fx * ln + sx * ln * 0.5, by + fy * ln + sy * ln * 0.5);
         ctx.moveTo(bx, by); ctx.lineTo(bx + fx * ln - sx * ln * 0.5, by + fy * ln - sy * ln * 0.5); ctx.stroke();
       }
       // eyes
-      const drawEye = (ex, ey) => {
+      const eye = (ex, ey) => {
         ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(ex, ey, HEADR * 0.26, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = "#1a1a1a"; ctx.beginPath(); ctx.arc(ex + fx * HEADR * 0.1, ey + fy * HEADR * 0.1, HEADR * 0.13, 0, Math.PI * 2); ctx.fill();
       };
-      drawEye(hx + fx * HEADR * 0.35 + sx * HEADR * 0.5, hy + fy * HEADR * 0.35 + sy * HEADR * 0.5);
-      drawEye(hx + fx * HEADR * 0.35 - sx * HEADR * 0.5, hy + fy * HEADR * 0.35 - sy * HEADR * 0.5);
-
-      // food pellet with glow
-      if (!mouse.on) {
-        food.pulse += 0.08;
-        const pr = 6 + Math.sin(food.pulse) * 1.5;
-        const g = ctx.createRadialGradient(food.x, food.y, 0, food.x, food.y, 26);
-        g.addColorStop(0, "rgba(229,38,31,0.5)"); g.addColorStop(1, "rgba(229,38,31,0)");
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(food.x, food.y, 26, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = "#e5261f"; ctx.beginPath(); ctx.arc(food.x, food.y, pr, 0, Math.PI * 2); ctx.fill();
-      }
+      eye(hx + fx * HEADR * 0.35 + sx * HEADR * 0.5, hy + fy * HEADR * 0.35 + sy * HEADR * 0.5);
+      eye(hx + fx * HEADR * 0.35 - sx * HEADR * 0.5, hy + fy * HEADR * 0.35 - sy * HEADR * 0.5);
     }
 
-    function frame() { t += 0.016; phase += 0.16; step(); draw(); raf = requestAnimationFrame(frame); }
+    function pellet(s) {
+      s.pulse += 0.08;
+      const pr = 6 + Math.sin(s.pulse) * 1.5;
+      const g = ctx.createRadialGradient(s.target.x, s.target.y, 0, s.target.x, s.target.y, 26);
+      const rgb = s.pellet === "#f0a500" ? "240,165,0" : "229,38,31";
+      g.addColorStop(0, `rgba(${rgb},0.45)`); g.addColorStop(1, `rgba(${rgb},0)`);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(s.target.x, s.target.y, 26, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = s.pellet; ctx.beginPath(); ctx.arc(s.target.x, s.target.y, pr, 0, Math.PI * 2); ctx.fill();
+    }
 
-    const onMove = (e) => { const r = canvas.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.on = true; };
-    const onLeave = () => (mouse.on = false);
-    window.addEventListener("pointermove", onMove);
+    function frame() {
+      t += 0.016; phase += 0.16;
+      ctx.clearRect(0, 0, W, H);
+      snakes.forEach(step);
+      snakes.forEach(pellet);
+      snakes.forEach(drawSnake);
+      raf = requestAnimationFrame(frame);
+    }
+
     window.addEventListener("resize", resize);
-    if (heroRef.current) heroRef.current.addEventListener("pointerleave", onLeave);
     resize();
     const ro = new ResizeObserver(() => resize());
     ro.observe(canvas);
     raf = requestAnimationFrame(frame);
-    return () => {
-      cancelAnimationFrame(raf); ro.disconnect();
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("resize", resize);
-      if (heroRef.current) heroRef.current.removeEventListener("pointerleave", onLeave);
-    };
+    return () => { cancelAnimationFrame(raf); ro.disconnect(); window.removeEventListener("resize", resize); };
   }, []);
 
   return (
