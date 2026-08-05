@@ -59,7 +59,7 @@ function ProjectPanel({ p }) {
 export function Projects() {
   return (
     <section id="work">
-      <div className="section" style={{ paddingBottom: 0 }}>
+      <div className="section proj-head" style={{ paddingBottom: 0 }}>
         <div className="section-head container">
           <div className="eyebrow-row">
             <span className="tick" />

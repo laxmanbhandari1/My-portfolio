@@ -14,7 +14,7 @@ export function HorizontalScroll({ children, panelCount = 3 }) {
   const x = useTransform(smooth, [0, 1], ["0%", `-${(panelCount - 1) * 100}%`]);
 
   return (
-    <section ref={ref} className="h-scroll" style={{ height: `${panelCount * 68}vh` }}>
+    <section ref={ref} className="h-scroll" style={{ height: `${panelCount * 50}vh` }}>
       <div className="h-sticky">
         <motion.div className="h-track" style={{ x }}>
           {children}

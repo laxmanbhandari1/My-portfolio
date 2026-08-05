@@ -13,7 +13,6 @@ import { Contact, Footer } from "./Contact";
 import { SmoothScroll } from "./ui/SmoothScroll";
 import { ScrollProgress } from "./ui/ScrollProgress";
 import { Cursor } from "./ui/Cursor";
-import { CursorSnake } from "./ui/CursorSnake";
 import { Marquee } from "./ui/Marquee";
 import { Reveal } from "./ui/Reveal";
 
@@ -62,7 +61,6 @@ export function Experience() {
         <Reveal><Blog /></Reveal>
         <Reveal><Contact /></Reveal>
         <Footer />
-        {homeVisible && <CursorSnake />}
       </motion.main>
 
       <AnimatePresence>
