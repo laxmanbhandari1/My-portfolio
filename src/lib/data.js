@@ -133,3 +133,15 @@ export const navLinks = [
   { label: "Blog", href: "#blog" },
   { label: "Skills", href: "#skills" },
 ];
+
+export const essay = {
+  title: "Lost in the Forest.",
+  lead:
+    "Life is like a forest. When you step into it, you find resources that help you grow — and dangers that can stop you. My life has felt the same. For a long time, I was lost in it. Not lost among the trees, but lost in other people's opinions and decisions — voices that slowly pulled me away from my own path.",
+  body: [
+    "I come from a simple family of four. My father is a priest, my mother takes care of our home, and my sister is studying. Growing up in Rampur, Palpa, I was surrounded by people who always had something to say. Whenever I tried something new, my neighbours were there with their judgment — this is good, this is bad — and often they used all their strength to stop me before I had even begun.",
+    "When I finished school in my hometown, I left for the city to continue my studies. Everything was new. It felt like walking alone through an unfamiliar jungle, unsure of every step. Part of me hoped that here, at last, I would be free from other people's opinions. But I was wrong. During my college admissions, everyone had advice — go here, this one is best, choose that — and once again my own voice was buried under everyone else's.",
+    "But this time, something was different. This time, I listened to myself. I chose my own college — not the one everyone pointed me toward, but the one I believed in. It was a small choice, but it was mine, and it was the first step I had ever taken on my own.",
+    "I won't pretend I have found my way out of the forest. I haven't. I am still walking, still learning which voice to trust, still working toward a future and a career I truly love. But for the first time, I am the one deciding which direction to walk. And whatever happens, I know this much about myself: I will never give up trying.",
+  ],
+};

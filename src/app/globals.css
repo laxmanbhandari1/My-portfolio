@@ -182,8 +182,8 @@ svg{display:block}
 .stack-card.red .stack-statement em{font-style:normal;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:8px}
 
 /* ───────────── ABOUT (3D tilt reveal) ───────────── */
-.about-wrap{display:flex;align-items:flex-start;justify-content:center}
-.tilt-scene{height:60rem;display:flex;align-items:center;justify-content:center;position:relative;padding:0 var(--pad-x)}
+.about-wrap{display:flex;flex-direction:column;align-items:center}
+.tilt-scene{min-height:44rem;height:auto;display:flex;align-items:center;justify-content:center;position:relative;padding:5rem var(--pad-x)}
 .tilt-perspective{width:100%;position:relative;perspective:1000px}
 .tilt-title{max-width:900px;margin:0 auto;text-align:center;margin-bottom:24px}
 .tilt-card{
@@ -404,12 +404,12 @@ html.lenis,html.lenis body{height:auto}
 .l3d-first{font-size:clamp(2.8rem,11vw,9rem);color:var(--ink)}
 .l3d-last{font-size:clamp(2.8rem,11vw,9rem);color:var(--red)}
 .l3d-last b{color:var(--red)}
-.l3d-enter{position:absolute;left:50%;bottom:clamp(38px,7vh,86px);transform:translateX(-50%);z-index:4;
-  width:118px;height:118px;border-radius:50%;border:1px solid var(--red);background:rgba(255,255,255,.55);backdrop-filter:blur(6px);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;
-  font-family:var(--mono);letter-spacing:.22em;font-size:.72rem;color:var(--ink);transition:.3s var(--ease)}
+.l3d-enter{position:absolute;left:50%;bottom:clamp(34px,6vh,72px);transform:translateX(-50%);z-index:4;
+  width:84px;height:84px;border-radius:50%;border:1px solid var(--red);background:rgba(255,255,255,.55);backdrop-filter:blur(6px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;
+  font-family:var(--mono);letter-spacing:.16em;font-size:.6rem;color:var(--ink);transition:.3s var(--ease)}
 .l3d-enter:hover{background:var(--red);color:#fff;transform:translateX(-50%) scale(1.05)}
-.l3d-arrow{color:var(--red);font-size:1.2rem;line-height:1}
+.l3d-arrow{color:var(--red);font-size:1rem;line-height:1}
 .l3d-enter:hover .l3d-arrow{color:#fff}
 @media (max-width:640px){.l3d-name{letter-spacing:.04em}}
 
@@ -478,3 +478,19 @@ html.lenis,html.lenis body{height:auto}
 .landing-3d .l3d-name{z-index:3}
 .landing-3d .l3d-top,.landing-3d .l3d-enter{z-index:4}
 @media (prefers-reduced-motion:reduce){.l3d-snake-img{animation:none}}
+
+/* ═══════════ ABOUT ESSAY ═══════════ */
+.about-lead{font-weight:500}
+.about-essay{max-width:720px;margin:clamp(40px,7vw,80px) auto 0}
+.about-essay p{font-size:clamp(1.02rem,1.4vw,1.24rem);line-height:1.75;color:var(--ink-soft);margin-bottom:1.4em}
+.about-essay > div:first-child p{color:var(--ink)}
+
+/* ═══════════ ABOUT ESSAY — all inside the box ═══════════ */
+.about-wrap .tilt-inner{display:block;grid-template-columns:1fr;overflow:visible}
+.about-wrap .tilt-card{max-width:860px}
+.about-essay-box{max-width:100%}
+.about-essay-box p{font-size:clamp(1rem,1.25vw,1.15rem);line-height:1.7;color:var(--ink-soft);margin-bottom:1.2em}
+.about-essay-box .about-lead{color:var(--ink);font-weight:500;font-size:clamp(1.05rem,1.4vw,1.28rem)}
+.about-stats-row{display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,54px);margin-top:1.6em;padding-top:1.6em;border-top:1px solid var(--hair)}
+.about-stats-row .stat b{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,3.5vw,2.6rem);letter-spacing:-.02em;display:block;line-height:1}
+.about-stats-row .stat span{color:var(--muted);font-size:.85rem}
