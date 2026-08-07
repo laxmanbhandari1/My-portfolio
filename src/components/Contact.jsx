@@ -1,13 +1,9 @@
 import { profile } from "@/lib/data";
-import { SnakeLayer } from "./ui/SnakeLayer";
-
-const YELLOW = [{ color: "#f0a500", dark: "#a86e00", light: "rgba(255,236,160,.6)", pellet: "#f0a500", pr: "240,165,0" }];
 
 export function Contact() {
   return (
     <section className="section" id="contact">
-      <div className="contact has-snake">
-        <SnakeLayer colors={YELLOW} />
+      <div className="contact">
         <div className="eyebrow-row" style={{ justifyContent: "center" }}>
           <span className="tick" />
           <span className="mono" style={{ color: "rgba(255,255,255,.6)" }}>

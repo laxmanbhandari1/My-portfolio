@@ -135,7 +135,7 @@ export const navLinks = [
 ];
 
 export const essay = {
-  title: "Lost in the Forest.",
+  title: "I Lost in the Forest.",
   lead:
     "Life is like a forest. When you step into it, you find resources that help you grow — and dangers that can stop you. My life has felt the same. For a long time, I was lost in it. Not lost among the trees, but lost in other people's opinions and decisions — voices that slowly pulled me away from my own path.",
   body: [

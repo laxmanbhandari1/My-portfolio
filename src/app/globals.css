@@ -487,10 +487,24 @@ html.lenis,html.lenis body{height:auto}
 
 /* ═══════════ ABOUT ESSAY — all inside the box ═══════════ */
 .about-wrap .tilt-inner{display:block;grid-template-columns:1fr;overflow:visible}
-.about-wrap .tilt-card{max-width:860px}
+.about-wrap .tilt-card{max-width:1100px}
 .about-essay-box{max-width:100%}
 .about-essay-box p{font-size:clamp(1rem,1.25vw,1.15rem);line-height:1.7;color:var(--ink-soft);margin-bottom:1.2em}
 .about-essay-box .about-lead{color:var(--ink);font-weight:500;font-size:clamp(1.05rem,1.4vw,1.28rem)}
+.about-clamped{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:.6em!important}
+.about-seemore{display:inline-flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;
+  font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:var(--red);padding:0 0 1.4em;position:relative}
+.about-seemore span{transition:transform .25s var(--ease)}
+.about-seemore:hover span{transform:translateX(4px)}
 .about-stats-row{display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,54px);margin-top:1.6em;padding-top:1.6em;border-top:1px solid var(--hair)}
 .about-stats-row .stat b{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,3.5vw,2.6rem);letter-spacing:-.02em;display:block;line-height:1}
 .about-stats-row .stat span{color:var(--muted);font-size:.85rem}
+
+/* ═══════════ STORY MODAL ═══════════ */
+.story-modal-backdrop{position:fixed;inset:0;z-index:80;background:rgba(20,20,20,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:24px}
+.story-modal{position:relative;width:min(760px,100%);max-height:82vh;overflow-y:auto;background:var(--paper);border-radius:24px;padding:clamp(32px,5vw,56px);box-shadow:0 40px 90px rgba(0,0,0,.3)}
+.story-modal-close{position:sticky;top:0;float:right;margin-left:12px;width:38px;height:38px;border-radius:50%;background:var(--paper-2);border:1px solid var(--hair);cursor:pointer;font-size:.9rem;color:var(--ink-soft);display:grid;place-items:center;transition:.2s}
+.story-modal-close:hover{color:var(--red);border-color:var(--red)}
+.story-modal-title{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:-.02em;margin-bottom:22px;clear:both}
+.story-modal-body p{font-size:clamp(1rem,1.3vw,1.12rem);line-height:1.75;color:var(--ink-soft);margin-bottom:1.2em}
+.story-modal-body p:first-child{color:var(--ink);font-weight:500}

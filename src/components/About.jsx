@@ -1,9 +1,13 @@
+"use client";
+import { useState } from "react";
 import { ContainerScroll } from "./ui/ContainerScroll";
 import { Counter } from "./ui/Counter";
 import { SplitReveal } from "./ui/SplitReveal";
+import { StoryModal } from "./ui/StoryModal";
 import { profile, essay } from "@/lib/data";
 
 export function About() {
+  const [open, setOpen] = useState(false);
   return (
     <div className="about-wrap section" id="about">
       <ContainerScroll
@@ -19,9 +23,10 @@ export function About() {
       >
         <div className="about-essay-box">
           <p className="about-lead">{essay.lead}</p>
-          {essay.body.map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
+          <p className="about-clamped">{essay.body[0]}</p>
+          <button className="about-seemore" onClick={() => setOpen(true)}>
+            See full story <span>→</span>
+          </button>
           <div className="about-stats-row">
             {profile.stats.map((s) => (
               <div className="stat" key={s.label}>
@@ -32,6 +37,13 @@ export function About() {
           </div>
         </div>
       </ContainerScroll>
+
+      <StoryModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title={essay.title}
+        paragraphs={[essay.lead, ...essay.body]}
+      />
     </div>
   );
 }
