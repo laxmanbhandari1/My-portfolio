@@ -13,6 +13,7 @@ import { Contact, Footer } from "./Contact";
 import { SmoothScroll } from "./ui/SmoothScroll";
 import { ScrollProgress } from "./ui/ScrollProgress";
 import { Cursor } from "./ui/Cursor";
+import { ChatWidget } from "./ChatWidget";
 import { Marquee } from "./ui/Marquee";
 import { Reveal } from "./ui/Reveal";
 
@@ -32,7 +33,6 @@ export function Experience() {
   }, [reduce]);
 
   const skip = useCallback(() => setPhase("home"), []);
-  const replay = useCallback(() => { setPhase("gate"); window.scrollTo(0, 0); }, []);
 
   const gateVisible = phase === "gate" || phase === "cover";
   const homeVisible = phase === "reveal" || phase === "home";
@@ -63,6 +63,8 @@ export function Experience() {
         <Footer />
       </motion.main>
 
+      {homeVisible && <ChatWidget />}
+
       <AnimatePresence>
         {gateVisible && (
           <motion.div key="gate" initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
@@ -86,10 +88,6 @@ export function Experience() {
           LB.
         </motion.span>
       </motion.div>
-
-      {phase === "home" && (
-        <button className="replay" onClick={replay}>↺ Replay intro</button>
-      )}
     </>
   );
 }
