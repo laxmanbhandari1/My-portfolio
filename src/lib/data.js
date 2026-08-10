@@ -21,9 +21,21 @@ export const profile = {
 };
 
 export const roles = [
-  { label: "Full-stack developer", detail: "Next.js, React & Supabase", icon: "code" },
-  { label: "Game-dev backend", detail: "Godot, real-time leaderboards", icon: "gamepad" },
-  { label: "Accessibility-first", detail: "ARIA, full keyboard nav", icon: "book" },
+  {
+    label: "Full-stack developer",
+    detail: "Next.js, React & Supabase",
+    icon: "code",
+  },
+  {
+    label: "Game-dev backend",
+    detail: "Godot, real-time leaderboards",
+    icon: "gamepad",
+  },
+  {
+    label: "Accessibility-first",
+    detail: "ARIA, full keyboard nav",
+    icon: "book",
+  },
 ];
 
 export const projects = [
@@ -130,14 +142,13 @@ export const posts = [
 export const navLinks = [
   { label: "About", href: "#about" },
   { label: "Work", href: "#work" },
-  { label: "Blog", href: "#blog" },
   { label: "Skills", href: "#skills" },
+  { label: "Blog", href: "#blog" },
 ];
 
 export const essay = {
   title: "I Lost in the Forest.",
-  lead:
-    "Life is like a forest. When you step into it, you find resources that help you grow — and dangers that can stop you. My life has felt the same. For a long time, I was lost in it. Not lost among the trees, but lost in other people's opinions and decisions — voices that slowly pulled me away from my own path.",
+  lead: "Life is like a forest. When you step into it, you find resources that help you grow — and dangers that can stop you. My life has felt the same. For a long time, I was lost in it. Not lost among the trees, but lost in other people's opinions and decisions — voices that slowly pulled me away from my own path.",
   body: [
     "I come from a simple family of four. My father is a priest, my mother takes care of our home, and my sister is studying. Growing up in Rampur, Palpa, I was surrounded by people who always had something to say. Whenever I tried something new, my neighbours were there with their judgment — this is good, this is bad — and often they used all their strength to stop me before I had even begun.",
     "When I finished school in my hometown, I left for the city to continue my studies. Everything was new. It felt like walking alone through an unfamiliar jungle, unsure of every step. Part of me hoped that here, at last, I would be free from other people's opinions. But I was wrong. During my college admissions, everyone had advice — go here, this one is best, choose that — and once again my own voice was buried under everyone else's.",

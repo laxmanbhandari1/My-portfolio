@@ -428,17 +428,23 @@ html.lenis,html.lenis body{height:auto}
 
 /* ═══════════ NAV (reference top bar) ═══════════ */
 .nav2{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;
-  padding:16px clamp(24px,4vw,60px);background:rgba(255,255,255,.72);backdrop-filter:blur(12px);border-bottom:1px solid var(--hair)}
+  padding:16px clamp(24px,4vw,60px);background:rgba(255,255,255,.78);backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
 .nav2-brand{font-family:var(--display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em}
 .nav2-brand b{color:var(--red)}
-.nav2-links{display:flex;gap:clamp(16px,2.2vw,38px)}
-.nav2-links a{font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;color:var(--ink-soft);position:relative;padding:4px 0}
+.nav2-links{display:flex;gap:clamp(20px,2.6vw,42px)}
+.nav2-links a{font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;color:var(--ink-soft);
+  position:relative;padding:6px 2px;transition:color .25s var(--ease)}
+.nav2-links a::after{content:"";position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);width:0;height:2px;
+  background:var(--red);border-radius:2px;transition:width .3s var(--ease)}
 .nav2-links a:hover{color:var(--ink)}
-.nav2-links a.active{color:var(--red)}
+.nav2-links a.active{color:var(--red);font-weight:600}
+.nav2-links a.active::after{width:100%}
 .nav2-right{display:flex;align-items:center;gap:18px}
-.nav2-talk{font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;color:var(--ink)}
+.nav2-talk{font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;color:var(--ink);transition:color .2s}
+.nav2-talk:hover{color:var(--red)}
 .nav2-talk .dot{color:var(--red)}
-.nav2-menu{width:46px;height:46px;border-radius:50%;background:#fff;border:1px solid var(--hair);box-shadow:0 8px 20px rgba(20,20,20,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer}
+.nav2-menu{width:46px;height:46px;border-radius:50%;background:#fff;border:1px solid var(--hair);box-shadow:0 8px 20px rgba(20,20,20,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:box-shadow .25s,transform .25s var(--ease)}
+.nav2-menu:hover{box-shadow:0 12px 26px rgba(229,38,31,.18);transform:translateY(-1px)}
 .nav2-menu span{width:18px;height:2px;background:var(--ink);border-radius:2px}
 @media(max-width:860px){.nav2-links,.nav2-talk{display:none}}
 
