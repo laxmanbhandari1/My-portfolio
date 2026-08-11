@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import { navLinks } from "@/lib/data";
 
-// Section ids to watch, in page order, matched against navLinks by href (#about → "about").
-const SECTION_IDS = navLinks.map((l) => l.href.replace("#", ""));
+// Section ids to watch, in page order. Contact is added explicitly because
+// it's rendered as a separate link, not part of the navLinks array.
+const SECTION_IDS = [...navLinks.map((l) => l.href.replace("#", "")), "contact"];
 
 export function Nav() {
   const [active, setActive] = useState(SECTION_IDS[0]);

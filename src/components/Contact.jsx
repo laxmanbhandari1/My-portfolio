@@ -106,21 +106,21 @@ export function Contact() {
         </div>
 
         <ContactForm />
+      </div>
 
-        <div className="contact-links">
-          <a href={profile.github} target="_blank" rel="noreferrer" className="contact-link">
-            <span className="cl-icon"><Icon name="github" /></span>
-            <span className="cl-text">GitHub</span>
-          </a>
-          <a href={profile.linkedin} target="_blank" rel="noreferrer" className="contact-link">
-            <span className="cl-icon"><Icon name="linkedin" /></span>
-            <span className="cl-text">LinkedIn</span>
-          </a>
-          <a href={`mailto:${profile.email}`} className="contact-link">
-            <span className="cl-icon"><Icon name="mail" /></span>
-            <span className="cl-text">Email</span>
-          </a>
-        </div>
+      <div className="contact-links">
+        <a href={profile.github} target="_blank" rel="noreferrer" className="contact-link">
+          <span className="cl-icon"><Icon name="github" /></span>
+          <span className="cl-text">GitHub</span>
+        </a>
+        <a href={profile.linkedin} target="_blank" rel="noreferrer" className="contact-link">
+          <span className="cl-icon"><Icon name="linkedin" /></span>
+          <span className="cl-text">LinkedIn</span>
+        </a>
+        <a href={`mailto:${profile.email}`} className="contact-link">
+          <span className="cl-icon"><Icon name="mail" /></span>
+          <span className="cl-text">Email</span>
+        </a>
       </div>
     </section>
   );
