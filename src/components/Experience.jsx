@@ -16,27 +16,20 @@ import { Cursor } from "./ui/Cursor";
 import { ChatWidget } from "./ChatWidget";
 import { Marquee } from "./ui/Marquee";
 import { Reveal } from "./ui/Reveal";
+import { Shatter } from "./ui/Shatter";
 
-// phases: "gate" → "cover" → "reveal" → "home"
+// phases: "gate" (age counter → name → Enter) → "shatter" (glass-break
+// transition) → "home"
 export function Experience() {
   const [phase, setPhase] = useState("gate");
 
-  const reduce =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const enter = useCallback(() => {
-    if (reduce) return setPhase("home");
-    setPhase("cover");
-    setTimeout(() => setPhase("reveal"), 560);
-    setTimeout(() => setPhase("home"), 1260);
-  }, [reduce]);
-
+  const enter = useCallback(() => setPhase("shatter"), []);
   const skip = useCallback(() => setPhase("home"), []);
+  const onShatterDone = useCallback(() => setPhase("home"), []);
 
-  const gateVisible = phase === "gate" || phase === "cover";
-  const homeVisible = phase === "reveal" || phase === "home";
-  const wipeY = phase === "cover" ? "0%" : homeVisible ? "-100%" : "100%";
+  const gateVisible = phase === "gate";
+  const shattering = phase === "shatter";
+  const homeVisible = phase === "shatter" || phase === "home";
 
   return (
     <>
@@ -48,11 +41,11 @@ export function Experience() {
         id="site"
         initial={false}
         animate={{ opacity: homeVisible ? 1 : 0 }}
-        transition={{ duration: 0.4 }}
-        style={{ pointerEvents: homeVisible ? "auto" : "none" }}
+        transition={{ duration: 0.3 }}
+        style={{ pointerEvents: phase === "home" ? "auto" : "none" }}
       >
         <Nav />
-        <Hero />
+        <Hero play={homeVisible} />
         <StackStatement />
         <Marquee />
         <About />
@@ -63,31 +56,17 @@ export function Experience() {
         <Footer />
       </motion.main>
 
-      {homeVisible && <ChatWidget />}
+      {phase === "home" && <ChatWidget />}
 
       <AnimatePresence>
         {gateVisible && (
-          <motion.div key="gate" initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+          <motion.div key="gate" initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
             <Landing onEnter={enter} onSkip={skip} />
           </motion.div>
         )}
       </AnimatePresence>
 
-      <motion.div
-        className="wipe"
-        aria-hidden="true"
-        initial={{ y: "100%" }}
-        animate={{ y: wipeY }}
-        transition={{ duration: phase === "cover" ? 0.55 : 0.6, ease: [0.7, 0, 0.3, 1] }}
-      >
-        <motion.span
-          className="wipe-mark"
-          animate={{ opacity: phase === "cover" ? 1 : 0 }}
-          transition={{ duration: 0.25, delay: phase === "cover" ? 0.2 : 0 }}
-        >
-          LB.
-        </motion.span>
-      </motion.div>
+      {shattering && <Shatter onDone={onShatterDone} />}
     </>
   );
 }
